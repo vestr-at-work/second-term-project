@@ -1,6 +1,6 @@
 ﻿
 namespace smart_ascii_gen {
-    partial class Form1 {
+    partial class Form_main {
         /// <summary>
         /// Vyžaduje se proměnná návrháře.
         /// </summary>
@@ -24,13 +24,164 @@ namespace smart_ascii_gen {
         /// obsah této metody v editoru kódu.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
+            this.pictureBox_original = new System.Windows.Forms.PictureBox();
+            this.button_generate = new System.Windows.Forms.Button();
+            this.button_browse = new System.Windows.Forms.Button();
+            this.richTextBox_output = new System.Windows.Forms.RichTextBox();
+            this.trackBar_lum_max = new System.Windows.Forms.TrackBar();
+            this.trackBar_lum_min = new System.Windows.Forms.TrackBar();
+            this.label_lum_min = new System.Windows.Forms.Label();
+            this.label_lum_max = new System.Windows.Forms.Label();
+            this.trackBar_ascii_width = new System.Windows.Forms.TrackBar();
+            this.label_width = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_original)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_ascii_width)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // pictureBox_original
+            // 
+            this.pictureBox_original.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pictureBox_original.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_original.Location = new System.Drawing.Point(1001, 25);
+            this.pictureBox_original.Name = "pictureBox_original";
+            this.pictureBox_original.Size = new System.Drawing.Size(212, 172);
+            this.pictureBox_original.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox_original.TabIndex = 0;
+            this.pictureBox_original.TabStop = false;
+            // 
+            // button_generate
+            // 
+            this.button_generate.Location = new System.Drawing.Point(1001, 296);
+            this.button_generate.Name = "button_generate";
+            this.button_generate.Size = new System.Drawing.Size(212, 59);
+            this.button_generate.TabIndex = 2;
+            this.button_generate.Text = "Generate";
+            this.button_generate.UseVisualStyleBackColor = true;
+            this.button_generate.Click += new System.EventHandler(this.button_generate_Click);
+            // 
+            // button_browse
+            // 
+            this.button_browse.Location = new System.Drawing.Point(1001, 224);
+            this.button_browse.Name = "button_browse";
+            this.button_browse.Size = new System.Drawing.Size(212, 59);
+            this.button_browse.TabIndex = 1;
+            this.button_browse.Text = "Browse";
+            this.button_browse.UseVisualStyleBackColor = true;
+            this.button_browse.Click += new System.EventHandler(this.button_browse_Click);
+            // 
+            // richTextBox_output
+            // 
+            this.richTextBox_output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox_output.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.richTextBox_output.Location = new System.Drawing.Point(27, 25);
+            this.richTextBox_output.Name = "richTextBox_output";
+            this.richTextBox_output.ReadOnly = true;
+            this.richTextBox_output.Size = new System.Drawing.Size(949, 673);
+            this.richTextBox_output.TabIndex = 4;
+            this.richTextBox_output.Text = "";
+            this.richTextBox_output.WordWrap = false;
+            // 
+            // trackBar_lum_max
+            // 
+            this.trackBar_lum_max.LargeChange = 50;
+            this.trackBar_lum_max.Location = new System.Drawing.Point(1001, 388);
+            this.trackBar_lum_max.Maximum = 255;
+            this.trackBar_lum_max.Name = "trackBar_lum_max";
+            this.trackBar_lum_max.Size = new System.Drawing.Size(212, 56);
+            this.trackBar_lum_max.SmallChange = 25;
+            this.trackBar_lum_max.TabIndex = 3;
+            this.trackBar_lum_max.Value = 255;
+            // 
+            // trackBar_lum_min
+            // 
+            this.trackBar_lum_min.LargeChange = 50;
+            this.trackBar_lum_min.Location = new System.Drawing.Point(1001, 459);
+            this.trackBar_lum_min.Maximum = 255;
+            this.trackBar_lum_min.Name = "trackBar_lum_min";
+            this.trackBar_lum_min.Size = new System.Drawing.Size(212, 56);
+            this.trackBar_lum_min.SmallChange = 25;
+            this.trackBar_lum_min.TabIndex = 4;
+            // 
+            // label_lum_min
+            // 
+            this.label_lum_min.AutoSize = true;
+            this.label_lum_min.Location = new System.Drawing.Point(998, 439);
+            this.label_lum_min.Name = "label_lum_min";
+            this.label_lum_min.Size = new System.Drawing.Size(231, 17);
+            this.label_lum_min.TabIndex = 9;
+            this.label_lum_min.Text = "Luminosity Range Minimum (0-255)";
+            // 
+            // label_lum_max
+            // 
+            this.label_lum_max.AutoSize = true;
+            this.label_lum_max.Location = new System.Drawing.Point(998, 368);
+            this.label_lum_max.Name = "label_lum_max";
+            this.label_lum_max.Size = new System.Drawing.Size(234, 17);
+            this.label_lum_max.TabIndex = 8;
+            this.label_lum_max.Text = "Luminosity Range Maximum (0-255)";
+            // 
+            // trackBar_ascii_width
+            // 
+            this.trackBar_ascii_width.LargeChange = 50;
+            this.trackBar_ascii_width.Location = new System.Drawing.Point(1001, 521);
+            this.trackBar_ascii_width.Maximum = 150;
+            this.trackBar_ascii_width.Minimum = 1;
+            this.trackBar_ascii_width.Name = "trackBar_ascii_width";
+            this.trackBar_ascii_width.Size = new System.Drawing.Size(212, 56);
+            this.trackBar_ascii_width.SmallChange = 20;
+            this.trackBar_ascii_width.TabIndex = 5;
+            this.trackBar_ascii_width.Value = 80;
+            // 
+            // label_width
+            // 
+            this.label_width.AutoSize = true;
+            this.label_width.Location = new System.Drawing.Point(998, 501);
+            this.label_width.Name = "label_width";
+            this.label_width.Size = new System.Drawing.Size(103, 17);
+            this.label_width.TabIndex = 9;
+            this.label_width.Text = "ASCII Art Width";
+            // 
+            // Form_main
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.BackColor = System.Drawing.SystemColors.Menu;
+            this.ClientSize = new System.Drawing.Size(1245, 730);
+            this.Controls.Add(this.label_lum_max);
+            this.Controls.Add(this.label_width);
+            this.Controls.Add(this.label_lum_min);
+            this.Controls.Add(this.trackBar_ascii_width);
+            this.Controls.Add(this.trackBar_lum_min);
+            this.Controls.Add(this.trackBar_lum_max);
+            this.Controls.Add(this.button_browse);
+            this.Controls.Add(this.button_generate);
+            this.Controls.Add(this.pictureBox_original);
+            this.Controls.Add(this.richTextBox_output);
+            this.Name = "Form_main";
+            this.Text = "Smart ASCII Art Generator";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_original)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_ascii_width)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.PictureBox pictureBox_original;
+        private System.Windows.Forms.Button button_generate;
+        private System.Windows.Forms.Button button_browse;
+        private System.Windows.Forms.RichTextBox richTextBox_output;
+        private System.Windows.Forms.TrackBar trackBar_lum_max;
+        private System.Windows.Forms.TrackBar trackBar_lum_min;
+        private System.Windows.Forms.Label label_lum_min;
+        private System.Windows.Forms.Label label_lum_max;
+        private System.Windows.Forms.TrackBar trackBar_ascii_width;
+        private System.Windows.Forms.Label label_width;
     }
 }
 
