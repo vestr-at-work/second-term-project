@@ -44,9 +44,9 @@ namespace smart_ascii_gen {
             // 
             this.pictureBox_original.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox_original.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox_original.Location = new System.Drawing.Point(1001, 25);
+            this.pictureBox_original.Location = new System.Drawing.Point(506, 25);
             this.pictureBox_original.Name = "pictureBox_original";
-            this.pictureBox_original.Size = new System.Drawing.Size(212, 172);
+            this.pictureBox_original.Size = new System.Drawing.Size(486, 490);
             this.pictureBox_original.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox_original.TabIndex = 0;
             this.pictureBox_original.TabStop = false;
@@ -78,30 +78,30 @@ namespace smart_ascii_gen {
             this.richTextBox_output.Location = new System.Drawing.Point(27, 25);
             this.richTextBox_output.Name = "richTextBox_output";
             this.richTextBox_output.ReadOnly = true;
-            this.richTextBox_output.Size = new System.Drawing.Size(949, 673);
+            this.richTextBox_output.Size = new System.Drawing.Size(460, 490);
             this.richTextBox_output.TabIndex = 4;
             this.richTextBox_output.Text = "";
             this.richTextBox_output.WordWrap = false;
             // 
             // trackBar_lum_max
             // 
-            this.trackBar_lum_max.LargeChange = 50;
+            this.trackBar_lum_max.LargeChange = 20;
             this.trackBar_lum_max.Location = new System.Drawing.Point(1001, 388);
             this.trackBar_lum_max.Maximum = 255;
             this.trackBar_lum_max.Name = "trackBar_lum_max";
             this.trackBar_lum_max.Size = new System.Drawing.Size(212, 56);
-            this.trackBar_lum_max.SmallChange = 25;
+            this.trackBar_lum_max.SmallChange = 10;
             this.trackBar_lum_max.TabIndex = 3;
             this.trackBar_lum_max.Value = 255;
             // 
             // trackBar_lum_min
             // 
-            this.trackBar_lum_min.LargeChange = 50;
+            this.trackBar_lum_min.LargeChange = 20;
             this.trackBar_lum_min.Location = new System.Drawing.Point(1001, 459);
             this.trackBar_lum_min.Maximum = 255;
             this.trackBar_lum_min.Name = "trackBar_lum_min";
             this.trackBar_lum_min.Size = new System.Drawing.Size(212, 56);
-            this.trackBar_lum_min.SmallChange = 25;
+            this.trackBar_lum_min.SmallChange = 10;
             this.trackBar_lum_min.TabIndex = 4;
             // 
             // label_lum_min
@@ -124,13 +124,13 @@ namespace smart_ascii_gen {
             // 
             // trackBar_ascii_width
             // 
-            this.trackBar_ascii_width.LargeChange = 50;
+            this.trackBar_ascii_width.LargeChange = 20;
             this.trackBar_ascii_width.Location = new System.Drawing.Point(1001, 521);
             this.trackBar_ascii_width.Maximum = 150;
             this.trackBar_ascii_width.Minimum = 1;
             this.trackBar_ascii_width.Name = "trackBar_ascii_width";
             this.trackBar_ascii_width.Size = new System.Drawing.Size(212, 56);
-            this.trackBar_ascii_width.SmallChange = 20;
+            this.trackBar_ascii_width.SmallChange = 10;
             this.trackBar_ascii_width.TabIndex = 5;
             this.trackBar_ascii_width.Value = 80;
             // 
@@ -139,9 +139,9 @@ namespace smart_ascii_gen {
             this.label_width.AutoSize = true;
             this.label_width.Location = new System.Drawing.Point(998, 501);
             this.label_width.Name = "label_width";
-            this.label_width.Size = new System.Drawing.Size(103, 17);
+            this.label_width.Size = new System.Drawing.Size(154, 17);
             this.label_width.TabIndex = 9;
-            this.label_width.Text = "ASCII Art Width";
+            this.label_width.Text = "ASCII Art Width (0-150)";
             // 
             // Form_main
             // 
