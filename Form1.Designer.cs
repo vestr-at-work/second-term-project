@@ -44,9 +44,9 @@ namespace smart_ascii_gen {
             // 
             this.pictureBox_original.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox_original.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox_original.Location = new System.Drawing.Point(506, 25);
+            this.pictureBox_original.Location = new System.Drawing.Point(1001, 25);
             this.pictureBox_original.Name = "pictureBox_original";
-            this.pictureBox_original.Size = new System.Drawing.Size(486, 490);
+            this.pictureBox_original.Size = new System.Drawing.Size(212, 180);
             this.pictureBox_original.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox_original.TabIndex = 0;
             this.pictureBox_original.TabStop = false;
@@ -78,7 +78,7 @@ namespace smart_ascii_gen {
             this.richTextBox_output.Location = new System.Drawing.Point(27, 25);
             this.richTextBox_output.Name = "richTextBox_output";
             this.richTextBox_output.ReadOnly = true;
-            this.richTextBox_output.Size = new System.Drawing.Size(460, 490);
+            this.richTextBox_output.Size = new System.Drawing.Size(947, 681);
             this.richTextBox_output.TabIndex = 4;
             this.richTextBox_output.Text = "";
             this.richTextBox_output.WordWrap = false;

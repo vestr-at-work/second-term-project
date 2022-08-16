@@ -15,6 +15,8 @@ namespace smart_ascii_gen {
         private const double blueConst = .144;
 
         Bitmap originalImage;
+        Bitmap resizedImage;
+        int newWidth = 300;
         Bitmap bluredGrayscaleImage;
         Bitmap edgesAnglesImage;
 
@@ -33,7 +35,7 @@ namespace smart_ascii_gen {
             for (int j = 0; j < inputImage.Height; j += (2*sampleStep)) {
                 for (int i = 0; i < inputImage.Width; i += sampleStep) {
                     int avgLuminosity = getAvgLuminosity(i, j, sampleStep, inputImage);
-                    int charIndex = getCharIndex(avgLuminosity, luminosityMinimum, luminosityMaximum);
+                    int charIndex = getChar(avgLuminosity, luminosityMinimum, luminosityMaximum);
                     generatedAscii.Append(asciiCharsSorted[charIndex]);
 
                 }
@@ -70,7 +72,7 @@ namespace smart_ascii_gen {
             return avgLuminosity;
         }
 
-        private int getCharIndex(int luminosityValue, int rangeMinimum, int rangeMaximum) {
+        private int getChar(int luminosityValue, int rangeMinimum, int rangeMaximum) {
             
             int range = rangeMaximum - rangeMinimum;
 
@@ -91,12 +93,14 @@ namespace smart_ascii_gen {
             OpenFileDialog openFile = new OpenFileDialog();
             if(openFile.ShowDialog() == DialogResult.OK) {
                 originalImage = new Bitmap(openFile.FileName);
-                pictureBox_original.Image = originalImage;
+                int newHeight = (int)(originalImage.Height * (newWidth / (double)originalImage.Width));
+                resizedImage = new Bitmap(originalImage, new Size(newWidth, newHeight));
+                //resizedImage = resizeImage(originalImage, 800);
+                pictureBox_original.Image = resizedImage;
             }
-            bluredGrayscaleImage = gausianBlur(originalImage);
+            bluredGrayscaleImage = gausianBlur(resizedImage);
             edgesAnglesImage = edgeDetection(bluredGrayscaleImage);
-            pictureBox_original.Image = edgesAnglesImage;
-            MessageBox.Show("done");
+            //pictureBox_original.Image = edgesAnglesImage;
         }
 
 
@@ -135,9 +139,9 @@ namespace smart_ascii_gen {
                         verticalMatrixSum++;
 
                     edgeValue = (int)Math.Min(255, (Math.Sqrt((verticalMatrixSum * verticalMatrixSum) + (horizontalMatrixSum * horizontalMatrixSum)) / 1000) * 255);
-                    edgeAngle = (int)Math.Abs((Math.Atan(horizontalMatrixSum / (double)verticalMatrixSum) / (2 * Math.PI)) * 360);
+                    edgeAngle = (int)((Math.Atan(horizontalMatrixSum / (double)verticalMatrixSum) / (2 * Math.PI)) * 360) + 90;
 
-                    edgeAnglePixelColor = Color.FromArgb(255, 0, edgeValue, 0);
+                    edgeAnglePixelColor = Color.FromArgb(255, edgeAngle, edgeValue, 0);
 
                     returnImage.SetPixel(x, y, edgeAnglePixelColor);
                 }
