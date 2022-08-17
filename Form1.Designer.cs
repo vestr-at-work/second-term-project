@@ -34,10 +34,13 @@ namespace smart_ascii_gen {
             this.label_lum_max = new System.Windows.Forms.Label();
             this.trackBar_ascii_width = new System.Windows.Forms.TrackBar();
             this.label_width = new System.Windows.Forms.Label();
+            this.label_edge_threshold = new System.Windows.Forms.Label();
+            this.trackBar_edge_threshold = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_original)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_min)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_ascii_width)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_edge_threshold)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox_original
@@ -74,6 +77,7 @@ namespace smart_ascii_gen {
             // richTextBox_output
             // 
             this.richTextBox_output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox_output.DetectUrls = false;
             this.richTextBox_output.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.richTextBox_output.Location = new System.Drawing.Point(27, 25);
             this.richTextBox_output.Name = "richTextBox_output";
@@ -125,23 +129,43 @@ namespace smart_ascii_gen {
             // trackBar_ascii_width
             // 
             this.trackBar_ascii_width.LargeChange = 20;
-            this.trackBar_ascii_width.Location = new System.Drawing.Point(1001, 521);
+            this.trackBar_ascii_width.Location = new System.Drawing.Point(1001, 597);
             this.trackBar_ascii_width.Maximum = 150;
             this.trackBar_ascii_width.Minimum = 1;
             this.trackBar_ascii_width.Name = "trackBar_ascii_width";
             this.trackBar_ascii_width.Size = new System.Drawing.Size(212, 56);
             this.trackBar_ascii_width.SmallChange = 10;
-            this.trackBar_ascii_width.TabIndex = 5;
+            this.trackBar_ascii_width.TabIndex = 6;
             this.trackBar_ascii_width.Value = 80;
             // 
             // label_width
             // 
             this.label_width.AutoSize = true;
-            this.label_width.Location = new System.Drawing.Point(998, 501);
+            this.label_width.Location = new System.Drawing.Point(998, 577);
             this.label_width.Name = "label_width";
             this.label_width.Size = new System.Drawing.Size(154, 17);
             this.label_width.TabIndex = 9;
             this.label_width.Text = "ASCII Art Width (0-150)";
+            // 
+            // label_edge_threshold
+            // 
+            this.label_edge_threshold.AutoSize = true;
+            this.label_edge_threshold.Location = new System.Drawing.Point(998, 508);
+            this.label_edge_threshold.Name = "label_edge_threshold";
+            this.label_edge_threshold.Size = new System.Drawing.Size(160, 17);
+            this.label_edge_threshold.TabIndex = 11;
+            this.label_edge_threshold.Text = "Edge Threshold (0-255)";
+            // 
+            // trackBar_edge_threshold
+            // 
+            this.trackBar_edge_threshold.LargeChange = 20;
+            this.trackBar_edge_threshold.Location = new System.Drawing.Point(1001, 528);
+            this.trackBar_edge_threshold.Maximum = 255;
+            this.trackBar_edge_threshold.Name = "trackBar_edge_threshold";
+            this.trackBar_edge_threshold.Size = new System.Drawing.Size(212, 56);
+            this.trackBar_edge_threshold.SmallChange = 10;
+            this.trackBar_edge_threshold.TabIndex = 5;
+            this.trackBar_edge_threshold.Value = 80;
             // 
             // Form_main
             // 
@@ -149,10 +173,12 @@ namespace smart_ascii_gen {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(1245, 730);
-            this.Controls.Add(this.label_lum_max);
             this.Controls.Add(this.label_width);
-            this.Controls.Add(this.label_lum_min);
             this.Controls.Add(this.trackBar_ascii_width);
+            this.Controls.Add(this.label_edge_threshold);
+            this.Controls.Add(this.trackBar_edge_threshold);
+            this.Controls.Add(this.label_lum_max);
+            this.Controls.Add(this.label_lum_min);
             this.Controls.Add(this.trackBar_lum_min);
             this.Controls.Add(this.trackBar_lum_max);
             this.Controls.Add(this.button_browse);
@@ -165,6 +191,7 @@ namespace smart_ascii_gen {
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_max)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_min)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_ascii_width)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_edge_threshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,6 +209,8 @@ namespace smart_ascii_gen {
         private System.Windows.Forms.Label label_lum_max;
         private System.Windows.Forms.TrackBar trackBar_ascii_width;
         private System.Windows.Forms.Label label_width;
+        private System.Windows.Forms.Label label_edge_threshold;
+        private System.Windows.Forms.TrackBar trackBar_edge_threshold;
     }
 }
 

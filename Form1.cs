@@ -20,38 +20,52 @@ namespace smart_ascii_gen {
         Bitmap bluredGrayscaleImage;
         Bitmap edgesAnglesImage;
 
+        private struct PixelInfo {
+            public PixelInfo(int lum, int edge, int angle) {
+                luminosityValue = lum;
+                edgeValue = edge;
+                edgeAngleValue = angle;
+            }
+
+            public int luminosityValue;
+            public int edgeValue;
+            public int edgeAngleValue;
+        }
+
         public Form_main() {
             InitializeComponent();
         }
 
         private void button_generate_Click(object sender, EventArgs e) {
-            Bitmap inputImage = (Bitmap)pictureBox_original.Image;
             int asciiArtWidth = trackBar_ascii_width.Value;
             int luminosityMinimum = trackBar_lum_min.Value;
             int luminosityMaximum = trackBar_lum_max.Value;
-            int sampleStep = Math.Max(1, (inputImage.Width / asciiArtWidth));
-            StringBuilder generatedAscii = new StringBuilder();
+            int edgeThreshold = trackBar_edge_threshold.Value;
+            int sampleStep = Math.Max(1, (resizedImage.Width / asciiArtWidth));
+            StringBuilder generatedASCII = new StringBuilder();
 
-            for (int j = 0; j < inputImage.Height; j += (2*sampleStep)) {
-                for (int i = 0; i < inputImage.Width; i += sampleStep) {
-                    int avgLuminosity = getAvgLuminosity(i, j, sampleStep, inputImage);
-                    int charIndex = getChar(avgLuminosity, luminosityMinimum, luminosityMaximum);
-                    generatedAscii.Append(asciiCharsSorted[charIndex]);
+            for (int j = 0; j < resizedImage.Height; j += (2*sampleStep)) {
+                for (int i = 0; i < resizedImage.Width; i += sampleStep) {
+                    PixelInfo avgPixelInfo = getAvgPixelInfo(i, j, sampleStep);
+                    generatedASCII.Append(getASCIIChar(avgPixelInfo, luminosityMinimum, luminosityMaximum, edgeThreshold));
 
                 }
-                generatedAscii.Append("\n");
+                generatedASCII.Append("\n");
             }
-            richTextBox_output.Text = generatedAscii.ToString();
+            richTextBox_output.Text = generatedASCII.ToString();
             
         }
 
-        private int getAvgLuminosity(int x, int y, int step, Bitmap image) {
+        private PixelInfo getAvgPixelInfo(int x, int y, int step) {
             Color pixelColor;
+            Color edgePixelColor;
             int luminositySum = 0;
+            int edgeSum = 0;
+            int angleSum = 0;
             int pixelCount = 0;
-            int avgLuminosity = 0;
+            PixelInfo pixelInfo;
             if (step <= 2) {
-                pixelColor = image.GetPixel(x, y);
+                pixelColor = resizedImage.GetPixel(x, y);
                 luminositySum = (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
                 pixelCount++;
                 
@@ -59,20 +73,25 @@ namespace smart_ascii_gen {
             else {
                 for (int j = -(step / 2); j < (step / 2); j++) {
                     for (int i = -(step / 2); i < (step / 2); i++) {
-                        if (((y + j) >= 0 && (y + j) < image.Height) && ((x + i) >= 0 && (x + i) < image.Width)) {
-                            pixelColor = image.GetPixel((x + i), (y + j));
+                        if (((y + j) >= 0 && (y + j) < resizedImage.Height) && ((x + i) >= 0 && (x + i) < resizedImage.Width)) {
+                            pixelColor = resizedImage.GetPixel((x + i), (y + j));
                             luminositySum += (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
+                            edgePixelColor = edgesAnglesImage.GetPixel((x + i), (y + j));
+                            edgeSum += (int)(edgePixelColor.R);
+                            angleSum += (int)(edgePixelColor.G);
                             pixelCount++;
                         } 
                     }
                 }
             }
+            //edgePixelColor = edgesAnglesImage.GetPixel(x, y);
+            //pixelInfo = new PixelInfo(luminositySum / pixelCount, edgePixelColor.R, edgePixelColor.G);
+            pixelInfo = new PixelInfo(luminositySum / pixelCount, edgeSum / pixelCount, angleSum / pixelCount);
 
-            avgLuminosity = luminositySum / pixelCount;
-            return avgLuminosity;
+            return pixelInfo;
         }
 
-        private int getChar(int luminosityValue, int rangeMinimum, int rangeMaximum) {
+        private char getASCIIChar(PixelInfo avgPixelInfo, int rangeMinimum, int rangeMaximum, int edgeThreshold) {
             
             int range = rangeMaximum - rangeMinimum;
 
@@ -82,10 +101,26 @@ namespace smart_ascii_gen {
                 range = 255;
             }
 
-            float scaledValue = (float)Math.Min(1, (Math.Max(0, (luminosityValue - rangeMinimum)) / (float)range));
+            float scaledValue = (float)Math.Min(1, (Math.Max(0, (avgPixelInfo.luminosityValue - rangeMinimum)) / (float)range));
             int charIndex = (int)((asciiCharsSorted.Length - 1) * scaledValue);
 
-            return charIndex;
+            if (avgPixelInfo.edgeValue > edgeThreshold && charIndex > asciiCharsSorted.Length * 0.15 && charIndex < asciiCharsSorted.Length * 0.85) {
+                if (avgPixelInfo.edgeAngleValue > 45 && avgPixelInfo.edgeAngleValue < 60) {
+                    return '\\';
+                }
+                else if (avgPixelInfo.edgeAngleValue > 85 && avgPixelInfo.edgeAngleValue < 95) {
+                    return '|';
+                }
+                else if (avgPixelInfo.edgeAngleValue > 120 && avgPixelInfo.edgeAngleValue < 135) {
+                    return '/';
+                }
+                else if (avgPixelInfo.edgeAngleValue < 5 || avgPixelInfo.edgeAngleValue > 175) {
+                    return '_';
+                }
+            }
+
+
+            return asciiCharsSorted[charIndex];
             
         }
 
@@ -140,8 +175,9 @@ namespace smart_ascii_gen {
 
                     edgeValue = (int)Math.Min(255, (Math.Sqrt((verticalMatrixSum * verticalMatrixSum) + (horizontalMatrixSum * horizontalMatrixSum)) / 1000) * 255);
                     edgeAngle = (int)((Math.Atan(horizontalMatrixSum / (double)verticalMatrixSum) / (2 * Math.PI)) * 360) + 90;
+                    //Console.WriteLine(edgeValue);
 
-                    edgeAnglePixelColor = Color.FromArgb(255, edgeAngle, edgeValue, 0);
+                    edgeAnglePixelColor = Color.FromArgb(255, edgeValue, edgeAngle, 0);
 
                     returnImage.SetPixel(x, y, edgeAnglePixelColor);
                 }
