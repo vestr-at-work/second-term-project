@@ -6,6 +6,34 @@ using System.Windows.Forms;
 namespace smart_ascii_gen {
     public partial class Form_main : Form {
 
+        public Form_main() {
+            InitializeComponent();
+        }
+
+        asciiArtGenerator generator = new asciiArtGenerator();
+
+        private void button_generate_Click(object sender, EventArgs e) {
+            int asciiArtWidth = trackBar_ascii_width.Value;
+            int luminosityMinimum = trackBar_lum_min.Value;
+            int luminosityMaximum = trackBar_lum_max.Value;
+            int edgeThreshold = trackBar_edge_threshold.Value;
+
+            richTextBox_output.Text = generator.generateArt(asciiArtWidth, luminosityMinimum, luminosityMaximum, edgeThreshold);   
+        }
+
+        
+        private void button_browse_Click(object sender, EventArgs e) {
+            OpenFileDialog openFile = new OpenFileDialog();
+            if(openFile.ShowDialog() == DialogResult.OK) {
+                Bitmap inputImage = new Bitmap(openFile.FileName);
+                generator.newInput(inputImage);
+                pictureBox_original.Image = inputImage;
+            }
+
+        }
+    }
+
+    public class asciiArtGenerator {
         //private String asciiCharsSorted = "@%#*+=-_:. ";
         private String asciiCharsSorted = "@#%S?*+=:,. ";
         //private String asciiCharsSorted = "@%#8EG4SJTn*1x(;~+:,-. ";
@@ -14,11 +42,11 @@ namespace smart_ascii_gen {
         private const double greenConst = .587;
         private const double blueConst = .144;
 
-        Bitmap originalImage;
-        Bitmap resizedImage;
-        int newWidth = 300;
-        Bitmap bluredGrayscaleImage;
-        Bitmap edgesAnglesImage;
+        private Bitmap originalImage;
+        private Bitmap resizedImage;
+        private int newWidth = 300;
+        private Bitmap bluredGrayscaleImage;
+        private Bitmap edgesAnglesImage;
 
         private struct PixelInfo {
             public PixelInfo(int lum, int edge, int angle) {
@@ -32,28 +60,30 @@ namespace smart_ascii_gen {
             public int edgeAngleValue;
         }
 
-        public Form_main() {
-            InitializeComponent();
+        public void newInput(Bitmap inputImage) {
+            originalImage = new Bitmap(inputImage);
+            int newHeight = (int)(originalImage.Height * (newWidth / (double)originalImage.Width));
+            resizedImage = new Bitmap(originalImage, new Size(newWidth, newHeight));
+
+            bluredGrayscaleImage = gausianBlur(resizedImage);
+            edgesAnglesImage = edgeDetection(bluredGrayscaleImage);
+            //pictureBox_original.Image = edgesAnglesImage;
         }
 
-        private void button_generate_Click(object sender, EventArgs e) {
-            int asciiArtWidth = trackBar_ascii_width.Value;
-            int luminosityMinimum = trackBar_lum_min.Value;
-            int luminosityMaximum = trackBar_lum_max.Value;
-            int edgeThreshold = trackBar_edge_threshold.Value;
+        public string generateArt(int asciiArtWidth, int luminosityMin, int luminosityMax, int edgeThreshold) {
             int sampleStep = Math.Max(1, (resizedImage.Width / asciiArtWidth));
             StringBuilder generatedASCII = new StringBuilder();
 
-            for (int j = 0; j < resizedImage.Height; j += (2*sampleStep)) {
+            for (int j = 0; j < resizedImage.Height; j += (2 * sampleStep)) {
                 for (int i = 0; i < resizedImage.Width; i += sampleStep) {
                     PixelInfo avgPixelInfo = getAvgPixelInfo(i, j, sampleStep);
-                    generatedASCII.Append(getASCIIChar(avgPixelInfo, luminosityMinimum, luminosityMaximum, edgeThreshold));
+                    generatedASCII.Append(getASCIIChar(avgPixelInfo, luminosityMin, luminosityMax, edgeThreshold));
 
                 }
                 generatedASCII.Append("\n");
             }
-            richTextBox_output.Text = generatedASCII.ToString();
-            
+
+            return generatedASCII.ToString();
         }
 
         private PixelInfo getAvgPixelInfo(int x, int y, int step) {
@@ -64,11 +94,12 @@ namespace smart_ascii_gen {
             int angleSum = 0;
             int pixelCount = 0;
             PixelInfo pixelInfo;
+
             if (step <= 2) {
                 pixelColor = resizedImage.GetPixel(x, y);
                 luminositySum = (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
                 pixelCount++;
-                
+
             }
             else {
                 for (int j = -(step / 2); j < (step / 2); j++) {
@@ -80,7 +111,7 @@ namespace smart_ascii_gen {
                             edgeSum += (int)(edgePixelColor.R);
                             angleSum += (int)(edgePixelColor.G);
                             pixelCount++;
-                        } 
+                        }
                     }
                 }
             }
@@ -92,7 +123,6 @@ namespace smart_ascii_gen {
         }
 
         private char getASCIIChar(PixelInfo avgPixelInfo, int rangeMinimum, int rangeMaximum, int edgeThreshold) {
-            
             int range = rangeMaximum - rangeMinimum;
 
             if (range <= 0) {
@@ -119,25 +149,55 @@ namespace smart_ascii_gen {
                 }
             }
 
-
             return asciiCharsSorted[charIndex];
-            
         }
 
-        private void button_browse_Click(object sender, EventArgs e) {
-            OpenFileDialog openFile = new OpenFileDialog();
-            if(openFile.ShowDialog() == DialogResult.OK) {
-                originalImage = new Bitmap(openFile.FileName);
-                int newHeight = (int)(originalImage.Height * (newWidth / (double)originalImage.Width));
-                resizedImage = new Bitmap(originalImage, new Size(newWidth, newHeight));
-                //resizedImage = resizeImage(originalImage, 800);
-                pictureBox_original.Image = resizedImage;
+        private Bitmap gausianBlur(Bitmap originalImage, int kernelSize = 3) {
+            Bitmap bluredImage = new Bitmap(originalImage);
+            Color pixelColor;
+            Color bluredPixelColor;
+            int pixelLuminosity;
+            int luminositySum = 0;
+            int bluredPixelValue;
+            //int pixelCount = 0;
+            int[,] matrix;
+            int matrixSum;
+
+            if (kernelSize == 3) {
+                matrix = new int[3, 3] { { 1, 2, 1 }, { 2, 4, 2, }, { 1, 2, 1 } };
+                matrixSum = 16;
             }
-            bluredGrayscaleImage = gausianBlur(resizedImage);
-            edgesAnglesImage = edgeDetection(bluredGrayscaleImage);
-            //pictureBox_original.Image = edgesAnglesImage;
-        }
+            else {
+                //nothing else yet implemented
+                kernelSize = 3;
+                matrix = new int[3, 3] { { 1, 2, 1 }, { 2, 4, 2, }, { 1, 2, 1 } };
+                matrixSum = 16;
+            }
 
+            for (int y = 0; y < originalImage.Height; y++) {
+                for (int x = 0; x < originalImage.Width; x++) {
+                    luminositySum = 0;
+
+                    for (int j = -(kernelSize / 2); j <= (kernelSize / 2); j++) {
+                        for (int i = -(kernelSize / 2); i <= (kernelSize / 2); i++) {
+                            if (((y + j) >= 0 && (y + j) < originalImage.Height) && ((x + i) >= 0 && (x + i) < originalImage.Width)) {
+                                pixelColor = originalImage.GetPixel((x + i), (y + j));
+                                pixelLuminosity = (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
+                                luminositySum += (pixelLuminosity * matrix[i + (kernelSize / 2), j + (kernelSize / 2)]);
+                                //pixelCount++;
+                            }
+                        }
+                    }
+
+                    bluredPixelValue = (int)Math.Min(255, (luminositySum / matrixSum));
+                    bluredPixelColor = Color.FromArgb(255, bluredPixelValue, bluredPixelValue, bluredPixelValue);
+                    bluredImage.SetPixel(x, y, bluredPixelColor);
+                }
+
+            }
+
+            return bluredImage;
+        }
 
         private Bitmap edgeDetection(Bitmap image) {
             Bitmap returnImage = new Bitmap(image);
@@ -185,51 +245,5 @@ namespace smart_ascii_gen {
             return returnImage;
         }
 
-        private Bitmap gausianBlur(Bitmap originalImage, int kernelSize = 3) {
-            Bitmap bluredImage = new Bitmap(originalImage);
-            Color pixelColor;
-            Color bluredPixelColor;
-            int pixelLuminosity;
-            int luminositySum = 0;
-            int bluredPixelValue;
-            //int pixelCount = 0;
-            int[,] matrix;
-            int matrixSum;
-
-            if (kernelSize == 3) {
-                matrix = new int[3, 3] { { 1, 2, 1 }, { 2, 4, 2, }, { 1, 2, 1 } };
-                matrixSum = 16;
-            }
-            else {
-                //nothing else yet implemented
-                kernelSize = 3;
-                matrix = new int[3, 3] { { 1, 2, 1 }, { 2, 4, 2, }, { 1, 2, 1 } };
-                matrixSum = 16;
-            }
-
-            for (int y = 0; y < originalImage.Height; y++) {
-                for (int x = 0; x < originalImage.Width; x++) {
-                    luminositySum = 0;
-
-                    for (int j = -(kernelSize / 2); j <= (kernelSize / 2); j++) {
-                        for (int i = -(kernelSize / 2); i <= (kernelSize / 2); i++) {
-                            if (((y + j) >= 0 && (y + j) < originalImage.Height) && ((x + i) >= 0 && (x + i) < originalImage.Width)) {
-                                pixelColor = originalImage.GetPixel((x + i), (y + j));
-                                pixelLuminosity = (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
-                                luminositySum += (pixelLuminosity * matrix[i + (kernelSize / 2), j + (kernelSize / 2)]);
-                                //pixelCount++;
-                            }
-                        }
-                    }
-
-                    bluredPixelValue = (int)Math.Min(255,(luminositySum / matrixSum));
-                    bluredPixelColor = Color.FromArgb(255, bluredPixelValue, bluredPixelValue, bluredPixelValue);
-                    bluredImage.SetPixel(x, y, bluredPixelColor);
-                }
-
-            }
-
-            return bluredImage;
-        }
     }
 }
