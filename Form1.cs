@@ -10,32 +10,37 @@ namespace smart_ascii_gen {
             InitializeComponent();
         }
 
-        asciiArtGenerator generator = new asciiArtGenerator();
+        asciiArtGenerator generator = new asciiArtGenerator(); 
 
         private void button_generate_Click(object sender, EventArgs e) {
+            //Acquring settings info from the form elements
             int asciiArtWidth = trackBar_ascii_width.Value;
             int luminosityMinimum = trackBar_lum_min.Value;
             int luminosityMaximum = trackBar_lum_max.Value;
             int edgeThreshold = trackBar_edge_threshold.Value;
 
+            //Generating ASCII art and showing it to user through richTextBox element
             richTextBox_output.Text = generator.generateArt(asciiArtWidth, luminosityMinimum, luminosityMaximum, edgeThreshold);   
         }
 
         
         private void button_browse_Click(object sender, EventArgs e) {
+            //Handeling of the open file dialog and passing the input image to the generator
             OpenFileDialog openFile = new OpenFileDialog();
             if(openFile.ShowDialog() == DialogResult.OK) {
                 Bitmap inputImage = new Bitmap(openFile.FileName);
                 generator.newInput(inputImage);
                 pictureBox_original.Image = inputImage;
             }
-
         }
     }
 
     public class asciiArtGenerator {
-        //private String asciiCharsSorted = "@%#*+=-_:. ";
+        //The main generator class containing all the necesary image transforming methods 
+
+        //String of chars from which the ASCII art is built
         private String asciiCharsSorted = "@#%S?*+=:,. ";
+        //private String asciiCharsSorted = "@%#*+=-_:. ";
         //private String asciiCharsSorted = "@%#8EG4SJTn*1x(;~+:,-. ";
 
         private const double redConst = .299;
@@ -61,16 +66,19 @@ namespace smart_ascii_gen {
         }
 
         public void newInput(Bitmap inputImage) {
+            //Method in which input image is resized (for preformance reasons) and auxiliary images created
+
             originalImage = new Bitmap(inputImage);
             int newHeight = (int)(originalImage.Height * (newWidth / (double)originalImage.Width));
             resizedImage = new Bitmap(originalImage, new Size(newWidth, newHeight));
 
-            bluredGrayscaleImage = gausianBlur(resizedImage);
-            edgesAnglesImage = edgeDetection(bluredGrayscaleImage);
-            //pictureBox_original.Image = edgesAnglesImage;
+            bluredGrayscaleImage = gausianBlur(resizedImage); 
+            edgesAnglesImage = edgeDetection(bluredGrayscaleImage); //image with edge intensity in the red color channel and angle of the edge (0-180 degrees) in the green color channel
         }
 
         public string generateArt(int asciiArtWidth, int luminosityMin, int luminosityMax, int edgeThreshold) {
+            //Method in which the ASCII art is generated and assembled
+
             int sampleStep = Math.Max(1, (resizedImage.Width / asciiArtWidth));
             StringBuilder generatedASCII = new StringBuilder();
 
@@ -87,6 +95,8 @@ namespace smart_ascii_gen {
         }
 
         private PixelInfo getAvgPixelInfo(int x, int y, int step) {
+            //Method which outputs average pixel values used by ASCII Art generator (luminosity, presence and the angle of the edge) of a given pixel area
+
             Color pixelColor;
             Color edgePixelColor;
             int luminositySum = 0;
@@ -123,18 +133,24 @@ namespace smart_ascii_gen {
         }
 
         private char getASCIIChar(PixelInfo avgPixelInfo, int rangeMinimum, int rangeMaximum, int edgeThreshold) {
-            int range = rangeMaximum - rangeMinimum;
+            //Method which determins which ASCII character fits the most
 
+            int range = rangeMaximum - rangeMinimum;
+            //if range set wrong, reset rangeMinimum and rangeMaximum
             if (range <= 0) {
                 rangeMinimum = 0;
                 rangeMaximum = 255;
                 range = 255;
             }
 
+            //scale luminosity value according to the range
             float scaledValue = (float)Math.Min(1, (Math.Max(0, (avgPixelInfo.luminosityValue - rangeMinimum)) / (float)range));
             int charIndex = (int)((asciiCharsSorted.Length - 1) * scaledValue);
 
+            //if edge in the area present and edge value higher than the threshold and luminosity value not too extreme (too light or too dark)
             if (avgPixelInfo.edgeValue > edgeThreshold && charIndex > asciiCharsSorted.Length * 0.15 && charIndex < asciiCharsSorted.Length * 0.85) {
+                //and if edge angle is apropriate return "edge character"
+
                 if (avgPixelInfo.edgeAngleValue > 45 && avgPixelInfo.edgeAngleValue < 60) {
                     return '\\';
                 }
@@ -149,17 +165,18 @@ namespace smart_ascii_gen {
                 }
             }
 
+            //otherwise return normal character from sorted character set
             return asciiCharsSorted[charIndex];
         }
 
         private Bitmap gausianBlur(Bitmap originalImage, int kernelSize = 3) {
+            //Method in which blured image is generated using small Gausian blur, that helps with the getting rid of false positive edge detections
             Bitmap bluredImage = new Bitmap(originalImage);
             Color pixelColor;
             Color bluredPixelColor;
             int pixelLuminosity;
             int luminositySum = 0;
             int bluredPixelValue;
-            //int pixelCount = 0;
             int[,] matrix;
             int matrixSum;
 
@@ -184,7 +201,6 @@ namespace smart_ascii_gen {
                                 pixelColor = originalImage.GetPixel((x + i), (y + j));
                                 pixelLuminosity = (int)(redConst * pixelColor.R + greenConst * pixelColor.G + blueConst * pixelColor.B);
                                 luminositySum += (pixelLuminosity * matrix[i + (kernelSize / 2), j + (kernelSize / 2)]);
-                                //pixelCount++;
                             }
                         }
                     }
@@ -200,7 +216,10 @@ namespace smart_ascii_gen {
         }
 
         private Bitmap edgeDetection(Bitmap image) {
-            Bitmap returnImage = new Bitmap(image);
+            //Method in which edges are detected using Sobel operator
+            //and their intensity and angle is saved in red and green color channel (respectively) of the output image
+
+            Bitmap outputImage = new Bitmap(image);
             Color pixelColor;
             Color edgeAnglePixelColor;
             int pixelValue;
@@ -224,25 +243,28 @@ namespace smart_ascii_gen {
                         for (int i = -(kernelSize / 2); i <= (kernelSize / 2); i++) {
                             if (((y + j) >= 0 && (y + j) < image.Height) && ((x + i) >= 0 && (x + i) < image.Width)) {
                                 pixelColor = image.GetPixel((x + i), (y + j));
-                                pixelValue = (int)pixelColor.R; //we know that all the colors are the same since the image is grayscale
+                                pixelValue = (int)pixelColor.R; //we know that all the channels are the same since the image is grayscale
                                 verticalMatrixSum += (pixelValue * verticalMatrix[i + (kernelSize / 2), j + (kernelSize / 2)]);
                                 horizontalMatrixSum += (pixelValue * horizontalMatrix[i + (kernelSize / 2), j + (kernelSize / 2)]);
                             }
                         }
                     }
-                    if (verticalMatrixSum == 0)
+
+                    if (verticalMatrixSum == 0) //edge case scenario
                         verticalMatrixSum++;
 
+                    //very basic aproach to scaling edge intensity to value between 0 and 255
                     edgeValue = (int)Math.Min(255, (Math.Sqrt((verticalMatrixSum * verticalMatrixSum) + (horizontalMatrixSum * horizontalMatrixSum)) / 1000) * 255);
+
+                    //converting radians to degrees and shifting values to positive range
                     edgeAngle = (int)((Math.Atan(horizontalMatrixSum / (double)verticalMatrixSum) / (2 * Math.PI)) * 360) + 90;
-                    //Console.WriteLine(edgeValue);
 
                     edgeAnglePixelColor = Color.FromArgb(255, edgeValue, edgeAngle, 0);
-
-                    returnImage.SetPixel(x, y, edgeAnglePixelColor);
+                    outputImage.SetPixel(x, y, edgeAnglePixelColor);
                 }
             }
-            return returnImage;
+
+            return outputImage;
         }
 
     }
