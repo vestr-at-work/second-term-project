@@ -33,6 +33,11 @@ namespace smart_ascii_gen {
                 pictureBox_original.Image = inputImage;
             }
         }
+
+        private void button_copy_Click(object sender, EventArgs e) {
+            //Copies the ASCII Art to clipboard
+            Clipboard.SetText(richTextBox_output.Text);
+        }
     }
 
     public class asciiArtGenerator {
@@ -72,7 +77,7 @@ namespace smart_ascii_gen {
             int newHeight = (int)(originalImage.Height * (newWidth / (double)originalImage.Width));
             resizedImage = new Bitmap(originalImage, new Size(newWidth, newHeight));
 
-            bluredGrayscaleImage = gausianBlur(resizedImage); 
+            bluredGrayscaleImage = gaussianBlur(resizedImage); 
             edgesAnglesImage = edgeDetection(bluredGrayscaleImage); //image with edge intensity in the red color channel and angle of the edge (0-180 degrees) in the green color channel
         }
 
@@ -169,7 +174,7 @@ namespace smart_ascii_gen {
             return asciiCharsSorted[charIndex];
         }
 
-        private Bitmap gausianBlur(Bitmap originalImage, int kernelSize = 3) {
+        private Bitmap gaussianBlur(Bitmap originalImage, int kernelSize = 3) {
             //Method in which blured image is generated using small Gausian blur, that helps with the getting rid of false positive edge detections
             Bitmap bluredImage = new Bitmap(originalImage);
             Color pixelColor;
@@ -253,7 +258,7 @@ namespace smart_ascii_gen {
                     if (verticalMatrixSum == 0) //edge case scenario
                         verticalMatrixSum++;
 
-                    //very basic aproach to scaling edge intensity to value between 0 and 255
+                    //very basic aproach to normalizing the edge intensity to value between 0 and 255
                     edgeValue = (int)Math.Min(255, (Math.Sqrt((verticalMatrixSum * verticalMatrixSum) + (horizontalMatrixSum * horizontalMatrixSum)) / 1000) * 255);
 
                     //converting radians to degrees and shifting values to positive range

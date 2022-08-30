@@ -36,6 +36,7 @@ namespace smart_ascii_gen {
             this.label_width = new System.Windows.Forms.Label();
             this.label_edge_threshold = new System.Windows.Forms.Label();
             this.trackBar_edge_threshold = new System.Windows.Forms.TrackBar();
+            this.button_copy = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_original)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_max)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_lum_min)).BeginInit();
@@ -167,12 +168,23 @@ namespace smart_ascii_gen {
             this.trackBar_edge_threshold.TabIndex = 5;
             this.trackBar_edge_threshold.Value = 80;
             // 
+            // button_copy
+            // 
+            this.button_copy.Location = new System.Drawing.Point(1001, 647);
+            this.button_copy.Name = "button_copy";
+            this.button_copy.Size = new System.Drawing.Size(212, 59);
+            this.button_copy.TabIndex = 7;
+            this.button_copy.Text = "Copy to Clipboard";
+            this.button_copy.UseVisualStyleBackColor = true;
+            this.button_copy.Click += new System.EventHandler(this.button_copy_Click);
+            // 
             // Form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(1245, 730);
+            this.Controls.Add(this.button_copy);
             this.Controls.Add(this.label_width);
             this.Controls.Add(this.trackBar_ascii_width);
             this.Controls.Add(this.label_edge_threshold);
@@ -211,6 +223,7 @@ namespace smart_ascii_gen {
         private System.Windows.Forms.Label label_width;
         private System.Windows.Forms.Label label_edge_threshold;
         private System.Windows.Forms.TrackBar trackBar_edge_threshold;
+        private System.Windows.Forms.Button button_copy;
     }
 }
 
