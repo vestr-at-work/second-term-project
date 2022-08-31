@@ -9,7 +9,6 @@ In order to mitigate false detections of edges the input image is (before detect
 
 The whole project is written in C# and uses Windows Forms for the UI.
 
-----------------------------------------------------------------
 
 ## **User manual:**
 
@@ -24,7 +23,7 @@ After starting the application user needs to **click on the *'Browse'* button** 
 
 Then, after **choosing the desired input image**, miniature version of it will appear in the top right corner.
 
-Right now user can either **leave settings on default** and simply **press the *'Generate'* button** or **set the settings** to better the result.
+Right now user can either **leave settings on default** and simply **press the *'Generate'* button** or **change the settings** to better fit the input image.
 
 Availabe setting options are:
 
@@ -39,6 +38,12 @@ Availabe setting options are:
 After every tuning of the settings the *'Generate'* button needs to be pressed for the effect to take place.
 
 **Finally**, if the user is satisfied with the result, she or he can **click on the *'Copy to Clipboard'* button** to copy the ASCII Art to clipboard.
+
+-------------------------------------------------------------
+
+**Tips**
+
+- The edge detection really increases the quality of the result if the input image is of raster graphic character or has very high contrast in the "visually important" areas
 
 
 
