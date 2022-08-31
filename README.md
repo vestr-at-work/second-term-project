@@ -1,4 +1,4 @@
-# "Smart" __ASCII Art Generator__ in C#
+# Smart __ASCII Art Generator__ in C#
 
 Generating __ASCII Art__ with the help of **edge detection** as a second term university project.
 
@@ -20,8 +20,25 @@ __User interface__ of the application is __simple__. It consists of **three butt
 
 ### *Using the App*
 
-After starting the application user needs to click on the *'Browse'* button and an *'Open file dialog'* will pop up. 
+After starting the application user needs to **click on the *'Browse'* button** and an *'Open file dialog'* will pop up. 
 
+Then, after **choosing the desired input image**, miniature version of it will appear in the top right corner.
+
+Right now user can either **leave settings on default** and simply **press the *'Generate'* button** or **set the settings** to better the result.
+
+Availabe setting options are:
+
+- *'Luminosity Range Maximum'* - Determins the maximum luminosity value above which every value will be translated to whitespace. Also shifts the translation values of the other ASCII characters to the appropriate range. (Set lower for images with lots of darker areas)
+
+- *'Luminosity Range Minimum'* - Determins the minimum luminosity value below which every value will be translated to '@' and also shifts the translation values of the other ASCII characters to the appropriate range. (Set higher for images with not many darker areas)
+
+- *'Edge Threshold'* - Determins the limit of edge intensity needed to be surpassed for the ASCII "edge characters" (such as '/', '\\', '_') to be used in the final ASCII Art.
+
+- *'ASCII Art Width'* - Determins the width (in number of characters) of the final ASCII Art.
+
+After every tuning of the settings the *'Generate'* button needs to be pressed for the effect to take place.
+
+**Finally**, if the user is satisfied with the result, she or he can **click on the *'Copy to Clipboard'* button** to copy the ASCII Art to clipboard.
 
 
 
