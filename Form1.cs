@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Smart ASCII Art Generator
+ * David Petera, 1. year of studies
+ * Summer term 2021/22
+ * NPRG031 – Programming 2
+*/
+
+using System;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
