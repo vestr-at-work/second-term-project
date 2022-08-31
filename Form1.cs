@@ -20,7 +20,11 @@ namespace smart_ascii_gen {
             int edgeThreshold = trackBar_edge_threshold.Value;
 
             //Generating ASCII art and showing it to user through richTextBox element
-            richTextBox_output.Text = generator.generateArt(asciiArtWidth, luminosityMinimum, luminosityMaximum, edgeThreshold);   
+            try {
+                generator.generateArt(asciiArtWidth, luminosityMinimum, luminosityMaximum, edgeThreshold);
+                richTextBox_output.Text = generator.outputASCII;
+            }
+            catch { }
         }
 
         
@@ -28,20 +32,29 @@ namespace smart_ascii_gen {
             //Handeling of the open file dialog and passing the input image to the generator
             OpenFileDialog openFile = new OpenFileDialog();
             if(openFile.ShowDialog() == DialogResult.OK) {
-                Bitmap inputImage = new Bitmap(openFile.FileName);
-                generator.newInput(inputImage);
-                pictureBox_original.Image = inputImage;
+                try {
+                    Bitmap inputImage = new Bitmap(openFile.FileName);
+                    generator.newInput(inputImage);
+                    pictureBox_original.Image = inputImage;
+                }
+                catch (ArgumentException) {
+                    MessageBox.Show("Wrong file chosen.\nPlease choose file in compatible format.", "Input file Error");
+                }
+                
             }
         }
 
         private void button_copy_Click(object sender, EventArgs e) {
-            //Copies the ASCII Art to clipboard
-            Clipboard.SetText(richTextBox_output.Text);
+            //Copying the ASCII Art to clipboard
+            try {
+                Clipboard.SetText(richTextBox_output.Text);
+            }
+            catch { }
         }
     }
 
     public class asciiArtGenerator {
-        //The main generator class containing all the necesary image transforming methods 
+        //The main generator class containing all the necessary image transforming methods 
 
         //String of chars from which the ASCII art is built
         private String asciiCharsSorted = "@#%S?*+=:,. ";
@@ -57,6 +70,8 @@ namespace smart_ascii_gen {
         private int newWidth = 300;
         private Bitmap bluredGrayscaleImage;
         private Bitmap edgesAnglesImage;
+
+        public string outputASCII;
 
         private struct PixelInfo {
             public PixelInfo(int lum, int edge, int angle) {
@@ -81,22 +96,24 @@ namespace smart_ascii_gen {
             edgesAnglesImage = edgeDetection(bluredGrayscaleImage); //image with edge intensity in the red color channel and angle of the edge (0-180 degrees) in the green color channel
         }
 
-        public string generateArt(int asciiArtWidth, int luminosityMin, int luminosityMax, int edgeThreshold) {
+        public void generateArt(int asciiArtWidth, int luminosityMin, int luminosityMax, int edgeThreshold) {
             //Method in which the ASCII art is generated and assembled
 
-            int sampleStep = Math.Max(1, (resizedImage.Width / asciiArtWidth));
-            StringBuilder generatedASCII = new StringBuilder();
+            if (resizedImage != null) {
+                int sampleStep = Math.Max(1, (resizedImage.Width / asciiArtWidth));
+                StringBuilder generatedASCII = new StringBuilder();
 
-            for (int j = 0; j < resizedImage.Height; j += (2 * sampleStep)) {
-                for (int i = 0; i < resizedImage.Width; i += sampleStep) {
-                    PixelInfo avgPixelInfo = getAvgPixelInfo(i, j, sampleStep);
-                    generatedASCII.Append(getASCIIChar(avgPixelInfo, luminosityMin, luminosityMax, edgeThreshold));
+                for (int j = 0; j < resizedImage.Height; j += (2 * sampleStep)) {
+                    for (int i = 0; i < resizedImage.Width; i += sampleStep) {
+                        PixelInfo avgPixelInfo = getAvgPixelInfo(i, j, sampleStep);
+                        generatedASCII.Append(getASCIIChar(avgPixelInfo, luminosityMin, luminosityMax, edgeThreshold));
 
+                    }
+                    generatedASCII.Append("\n");
                 }
-                generatedASCII.Append("\n");
-            }
 
-            return generatedASCII.ToString();
+                outputASCII = generatedASCII.ToString();
+            }
         }
 
         private PixelInfo getAvgPixelInfo(int x, int y, int step) {
@@ -239,8 +256,8 @@ namespace smart_ascii_gen {
             verticalMatrix = new int[kernelSize, kernelSize] { { -1, -2, -1 }, { 0, 0, 0, }, { 1, 2, 1 } };
             horizontalMatrix = new int[kernelSize, kernelSize] { { -1, 0, 1 }, { -2, 0, 2, }, { -1, 0, 1 } };
 
-            for (int y = 1; y < image.Height - 1; y++) {
-                for (int x = 1; x < image.Width - 1; x++) {
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
                     verticalMatrixSum = 0;
                     horizontalMatrixSum = 0;
 
@@ -271,6 +288,5 @@ namespace smart_ascii_gen {
 
             return outputImage;
         }
-
     }
 }

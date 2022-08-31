@@ -84,7 +84,7 @@ namespace smart_ascii_gen {
             this.richTextBox_output.Name = "richTextBox_output";
             this.richTextBox_output.ReadOnly = true;
             this.richTextBox_output.Size = new System.Drawing.Size(947, 681);
-            this.richTextBox_output.TabIndex = 4;
+            this.richTextBox_output.TabIndex = 8;
             this.richTextBox_output.Text = "";
             this.richTextBox_output.WordWrap = false;
             // 
