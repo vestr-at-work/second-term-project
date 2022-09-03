@@ -53,6 +53,7 @@ namespace smart_ascii_gen {
         /// <param name="e"></param>
         private void button_browse_Click(object sender, EventArgs e) {
             OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg";
             if(openFile.ShowDialog() == DialogResult.OK) {
                 try {
                     Bitmap inputImage = new Bitmap(openFile.FileName);
