@@ -46,6 +46,7 @@ namespace smart_ascii_gen {
             // 
             // pictureBox_original
             // 
+            this.pictureBox_original.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox_original.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox_original.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox_original.Location = new System.Drawing.Point(1001, 25);
@@ -57,6 +58,7 @@ namespace smart_ascii_gen {
             // 
             // button_generate
             // 
+            this.button_generate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_generate.Location = new System.Drawing.Point(1001, 296);
             this.button_generate.Name = "button_generate";
             this.button_generate.Size = new System.Drawing.Size(212, 59);
@@ -67,6 +69,7 @@ namespace smart_ascii_gen {
             // 
             // button_browse
             // 
+            this.button_browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_browse.Location = new System.Drawing.Point(1001, 224);
             this.button_browse.Name = "button_browse";
             this.button_browse.Size = new System.Drawing.Size(212, 59);
@@ -77,10 +80,14 @@ namespace smart_ascii_gen {
             // 
             // richTextBox_output
             // 
+            this.richTextBox_output.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox_output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox_output.DetectUrls = false;
             this.richTextBox_output.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.richTextBox_output.Location = new System.Drawing.Point(27, 25);
+            this.richTextBox_output.Margin = new System.Windows.Forms.Padding(15);
             this.richTextBox_output.Name = "richTextBox_output";
             this.richTextBox_output.ReadOnly = true;
             this.richTextBox_output.Size = new System.Drawing.Size(947, 681);
@@ -90,6 +97,7 @@ namespace smart_ascii_gen {
             // 
             // trackBar_lum_max
             // 
+            this.trackBar_lum_max.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_lum_max.LargeChange = 20;
             this.trackBar_lum_max.Location = new System.Drawing.Point(1001, 388);
             this.trackBar_lum_max.Maximum = 255;
@@ -101,6 +109,7 @@ namespace smart_ascii_gen {
             // 
             // trackBar_lum_min
             // 
+            this.trackBar_lum_min.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_lum_min.LargeChange = 20;
             this.trackBar_lum_min.Location = new System.Drawing.Point(1001, 459);
             this.trackBar_lum_min.Maximum = 255;
@@ -111,6 +120,7 @@ namespace smart_ascii_gen {
             // 
             // label_lum_min
             // 
+            this.label_lum_min.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_lum_min.AutoSize = true;
             this.label_lum_min.Location = new System.Drawing.Point(998, 439);
             this.label_lum_min.Name = "label_lum_min";
@@ -120,6 +130,7 @@ namespace smart_ascii_gen {
             // 
             // label_lum_max
             // 
+            this.label_lum_max.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_lum_max.AutoSize = true;
             this.label_lum_max.Location = new System.Drawing.Point(998, 368);
             this.label_lum_max.Name = "label_lum_max";
@@ -129,6 +140,7 @@ namespace smart_ascii_gen {
             // 
             // trackBar_ascii_width
             // 
+            this.trackBar_ascii_width.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_ascii_width.LargeChange = 20;
             this.trackBar_ascii_width.Location = new System.Drawing.Point(1001, 597);
             this.trackBar_ascii_width.Maximum = 150;
@@ -141,6 +153,7 @@ namespace smart_ascii_gen {
             // 
             // label_width
             // 
+            this.label_width.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_width.AutoSize = true;
             this.label_width.Location = new System.Drawing.Point(998, 577);
             this.label_width.Name = "label_width";
@@ -150,6 +163,7 @@ namespace smart_ascii_gen {
             // 
             // label_edge_threshold
             // 
+            this.label_edge_threshold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_edge_threshold.AutoSize = true;
             this.label_edge_threshold.Location = new System.Drawing.Point(998, 508);
             this.label_edge_threshold.Name = "label_edge_threshold";
@@ -159,6 +173,7 @@ namespace smart_ascii_gen {
             // 
             // trackBar_edge_threshold
             // 
+            this.trackBar_edge_threshold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_edge_threshold.LargeChange = 20;
             this.trackBar_edge_threshold.Location = new System.Drawing.Point(1001, 528);
             this.trackBar_edge_threshold.Maximum = 255;
@@ -170,6 +185,7 @@ namespace smart_ascii_gen {
             // 
             // button_copy
             // 
+            this.button_copy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_copy.Location = new System.Drawing.Point(1001, 647);
             this.button_copy.Name = "button_copy";
             this.button_copy.Size = new System.Drawing.Size(212, 59);
