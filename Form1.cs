@@ -84,7 +84,7 @@ namespace smart_ascii_gen {
     /// </summary>
     public class asciiArtGenerator {
 
-        ///String of chars from which the ASCII art is built.
+        //String of chars from which the ASCII art is built.
         private String asciiCharsSorted = "@#%S?*+=:,. ";
         //private String asciiCharsSorted = "@%#*+=-_:. ";
         //private String asciiCharsSorted = "@%#8EG4SJTn*1x(;~+:,-. ";
@@ -210,20 +210,20 @@ namespace smart_ascii_gen {
         private char getASCIIChar(PixelInfo avgPixelInfo, int rangeMinimum, int rangeMaximum, int edgeThreshold) {
 
             int range = rangeMaximum - rangeMinimum;
-            ///if range set wrong, reset rangeMinimum and rangeMaximum
+            //if range set wrong, reset rangeMinimum and rangeMaximum
             if (range <= 0) {
                 rangeMinimum = 0;
                 rangeMaximum = 255;
                 range = 255;
             }
 
-            ///scale luminosity value according to the range
+            //scale luminosity value according to the range
             float scaledValue = (float)Math.Min(1, (Math.Max(0, (avgPixelInfo.luminosityValue - rangeMinimum)) / (float)range));
             int charIndex = (int)((asciiCharsSorted.Length - 1) * scaledValue);
 
-            ///if edge in the area present and edge value higher than the threshold and luminosity value not too extreme (too light or too dark)
+            //if edge in the area present and edge value higher than the threshold and luminosity value not too extreme (too light or too dark)
             if (avgPixelInfo.edgeValue > edgeThreshold && charIndex > asciiCharsSorted.Length * 0.15 && charIndex < asciiCharsSorted.Length * 0.85) {
-                ///and if edge angle is apropriate return "edge character"
+                //and if edge angle is apropriate return "edge character"
 
                 if (avgPixelInfo.edgeAngleValue > 45 && avgPixelInfo.edgeAngleValue < 60) {
                     return '\\';
@@ -239,7 +239,7 @@ namespace smart_ascii_gen {
                 }
             }
 
-            ///otherwise return normal character from sorted character set
+            //otherwise return normal character from sorted character set
             return asciiCharsSorted[charIndex];
         }
 
@@ -265,7 +265,7 @@ namespace smart_ascii_gen {
                 matrixSum = 16;
             }
             else {
-                ///nothing else yet implemented
+                //nothing else yet implemented
                 kernelSize = 3;
                 matrix = new int[3, 3] { { 1, 2, 1 }, { 2, 4, 2, }, { 1, 2, 1 } };
                 matrixSum = 16;
@@ -337,10 +337,10 @@ namespace smart_ascii_gen {
                     if (verticalMatrixSum == 0) //edge case scenario
                         verticalMatrixSum++;
 
-                    ///very basic aproach to normalizing the edge intensity to value between 0 and 255
+                    //very basic aproach to normalizing the edge intensity to value between 0 and 255
                     edgeValue = (int)Math.Min(255, (Math.Sqrt((verticalMatrixSum * verticalMatrixSum) + (horizontalMatrixSum * horizontalMatrixSum)) / 1000) * 255);
 
-                    ///converting radians to degrees and shifting values to positive range
+                    //converting radians to degrees and shifting values to positive range
                     edgeAngle = (int)((Math.Atan(horizontalMatrixSum / (double)verticalMatrixSum) / (2 * Math.PI)) * 360) + 90;
 
                     edgeAnglePixelColor = Color.FromArgb(255, edgeValue, edgeAngle, 0);
